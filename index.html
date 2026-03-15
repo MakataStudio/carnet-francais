@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mon Carnet de Français — Estefi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue-dark:  #1E3A8A;
+      --blue:       #2563EB;
+      --blue-light: #DBEAFE;
+      --gold:       #F59E0B;
+      --gold-light: #FEF3C7;
+      --green:      #16A34A;
+      --green-light:#DCFCE7;
+      --red:        #DC2626;
+      --red-light:  #FEE2E2;
+      --gray-900:   #111827;
+      --gray-700:   #374151;
+      --gray-500:   #6B7280;
+      --gray-200:   #E5E7EB;
+      --gray-100:   #F3F4F6;
+      --bg:         #F9FAFB;
+      --white:      #FFFFFF;
+      --radius:     12px;
+      --shadow:     0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: var(--blue-dark);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 100;
+      transition: transform .3s ease;
+    }
+    #sidebar-header {
+      padding: 28px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    #sidebar-header .flag { font-size: 28px; margin-bottom: 6px; }
+    #sidebar-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      line-height: 1.3;
+      color: var(--white);
+    }
+    #sidebar-header p { font-size: 12px; color: rgba(255,255,255,.55); margin-top: 4px; }
+    #sidebar nav { flex: 1; padding: 16px 0; overflow-y: auto; }
+    .nav-group-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(255,255,255,.4);
+      padding: 10px 20px 6px;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,.75);
+      font-size: 13.5px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-align: left;
+      transition: background .15s, color .15s;
+      border-radius: 0;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,.08); color: var(--white); }
+    .nav-btn.active { background: rgba(255,255,255,.14); color: var(--white); font-weight: 600; }
+    .nav-btn .badge {
+      margin-left: auto;
+      font-size: 10px;
+      background: var(--gold);
+      color: var(--gray-900);
+      border-radius: 20px;
+      padding: 2px 7px;
+      font-weight: 700;
+    }
+    .nav-btn .badge.soon { background: rgba(255,255,255,.15); color: rgba(255,255,255,.5); }
+    .nav-btn .icon { font-size: 16px; width: 20px; text-align: center; }
+    #sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      font-size: 11.5px;
+      color: rgba(255,255,255,.4);
+    }
+
+    /* ── Main ── */
+    #main {
+      margin-left: 260px;
+      flex: 1;
+      min-height: 100vh;
+    }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── Page header ── */
+    .page-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 28px 40px 24px;
+    }
+    .page-header .breadcrumb {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+    .page-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--gray-900);
+    }
+    .page-header .subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-top: 6px;
+    }
+    .page-header .meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+    .meta-chip.gold { background: var(--gold-light); color: #92400E; }
+    .meta-chip.green { background: var(--green-light); color: var(--green); }
+
+    /* ── Content area ── */
+    .content { padding: 32px 40px 60px; max-width: 960px; }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--gray-500);
+      margin-bottom: 16px;
+      margin-top: 36px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    /* ── Cards grid ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      border-top: 3px solid var(--blue);
+    }
+    .card.gold  { border-top-color: var(--gold); }
+    .card.green { border-top-color: var(--green); }
+    .card.red   { border-top-color: var(--red); }
+    .card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+    .card.gold h3  { color: #92400E; }
+    .card.green h3 { color: var(--green); }
+    .card.red h3   { color: var(--red); }
+
+    /* ── Wide card ── */
+    .card-wide {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      border-top: 3px solid var(--blue);
+      margin-bottom: 16px;
+    }
+    .card-wide h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 14px;
+    }
+    .card-wide.gold { border-top-color: var(--gold); }
+    .card-wide.gold h3 { color: #92400E; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      margin: 8px 0;
+    }
+    th {
+      background: var(--gray-100);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--gray-500);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    td code, td strong {
+      font-family: 'Inter', monospace;
+      font-size: 13px;
+    }
+    td .correct { color: var(--green); font-weight: 600; }
+    td .wrong   { color: var(--red); }
+
+    /* ── Code / example blocks ── */
+    .example-box {
+      background: var(--blue-light);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 14px;
+      margin: 10px 0;
+      color: var(--blue-dark);
+    }
+    .example-box.gold {
+      background: var(--gold-light);
+      border-left-color: var(--gold);
+      color: #78350F;
+    }
+    .example-box.red {
+      background: var(--red-light);
+      border-left-color: var(--red);
+      color: #7F1D1D;
+    }
+    .example-box.green {
+      background: var(--green-light);
+      border-left-color: var(--green);
+      color: #14532D;
+    }
+    .example-box em { font-style: italic; }
+    .example-box strong { font-weight: 700; }
+
+    /* ── Rule box ── */
+    .rule-box {
+      background: var(--gray-900);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      font-size: 14px;
+      font-family: 'Inter', monospace;
+      margin: 12px 0;
+      letter-spacing: .02em;
+    }
+    .rule-box .label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    /* ── Flip cards ── */
+    .flip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 12px 0 24px;
+    }
+    .flip-card { perspective: 900px; height: 130px; cursor: pointer; }
+    .flip-card .inner {
+      position: relative;
+      width: 100%; height: 100%;
+      transition: transform .55s cubic-bezier(.4,0,.2,1);
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .inner { transform: rotateY(180deg); }
+    .flip-card .front, .flip-card .back {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .flip-card .front {
+      background: var(--blue-dark);
+      color: var(--white);
+    }
+    .flip-card .front .infinitif {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .flip-card .front .hint {
+      font-size: 11px;
+      color: rgba(255,255,255,.5);
+    }
+    .flip-card .back {
+      background: var(--white);
+      border: 2px solid var(--blue-light);
+      transform: rotateY(180deg);
+      color: var(--blue-dark);
+    }
+    .flip-card .back .participe {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .flip-card .back .auxiliaire {
+      font-size: 11px;
+      margin-top: 4px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .flip-card .back .auxiliaire.avoir {
+      background: var(--gold-light);
+      color: #92400E;
+    }
+    .flip-card .back .auxiliaire.etre {
+      background: var(--blue-light);
+      color: var(--blue-dark);
+    }
+    .flip-hint {
+      font-size: 11px;
+      color: var(--gray-500);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* ── Exercise box ── */
+    .exercise-block {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--blue);
+    }
+    .exercise-block.gold { border-left-color: var(--gold); }
+    .exercise-block.green { border-left-color: var(--green); }
+    .exercise-num {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+    .exercise-block p {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: var(--gray-700);
+    }
+    .exercise-block .blank {
+      display: inline-block;
+      min-width: 120px;
+      border-bottom: 2px solid var(--blue);
+      margin: 0 3px;
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .exercise-block .note {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    /* ── Tip box ── */
+    .tip {
+      display: flex;
+      gap: 12px;
+      background: var(--gold-light);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin: 14px 0;
+      font-size: 13.5px;
+      color: #78350F;
+    }
+    .tip .emoji { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Progress pill ── */
+    .lesson-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .lesson-status.done { background: var(--green-light); color: var(--green); }
+    .lesson-status.today { background: var(--gold-light); color: #92400E; }
+    .lesson-status.upcoming { background: var(--gray-100); color: var(--gray-500); }
+
+    /* ── Dashboard cards ── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .dash-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+      border: 2px solid transparent;
+    }
+    .dash-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    }
+    .dash-card.today-card { border-color: var(--gold); }
+    .dash-card .day-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+    }
+    .dash-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .dash-card p {
+      font-size: 12.5px;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+    .dash-card .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+    }
+    .dash-card .duration {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--gray-500);
+    }
+
+    /* ── Negation diagram ── */
+    .neg-diagram {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .neg-part {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .neg-part.ne   { background: #FEE2E2; color: #991B1B; }
+    .neg-part.aux  { background: #DBEAFE; color: #1E3A8A; }
+    .neg-part.neg  { background: #FEF3C7; color: #92400E; }
+    .neg-part.pp   { background: #DCFCE7; color: #14532D; }
+    .neg-arrow { color: var(--gray-500); font-size: 12px; }
+
+    /* ── Conjugation box ── */
+    .conj-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin: 10px 0;
+      font-size: 13.5px;
+    }
+    .conj-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: var(--gray-100);
+    }
+    .conj-row .pronoun { color: var(--gray-500); font-size: 12.5px; }
+    .conj-row .verb { font-weight: 600; color: var(--blue-dark); }
+    .conj-row.highlight { background: var(--blue-light); }
+    .conj-row.highlight .verb { color: var(--blue); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main { margin-left: 0; }
+      .page-header, .content { padding-left: 20px; padding-right: 20px; }
+      #hamburger {
+        display: flex;
+        position: fixed;
+        top: 16px; left: 16px;
+        z-index: 200;
+        background: var(--blue-dark);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        width: 40px; height: 40px;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+      }
+      .page-header { padding-top: 60px; }
+    }
+    @media (min-width: 769px) {
+      #hamburger { display: none; }
+    }
+
+    /* ── Print ── */
+    @media print {
+      #sidebar, #hamburger { display: none; }
+      #main { margin-left: 0; }
+      .flip-card .inner { transform: none !important; }
+      .flip-card .back { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hamburger (mobile) -->
+<button id="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+
+<!-- ── Sidebar ── -->
+<aside id="sidebar">
+  <div id="sidebar-header">
+    <div class="flag">🇫🇷</div>
+    <h1>Mon Carnet<br>de Français</h1>
+    <p>Estefi · DELF B1 · 2026</p>
+  </div>
+  <nav>
+    <div class="nav-group-label">Navigation</div>
+    <button class="nav-btn active" onclick="showPage('dashboard', this)">
+      <span class="icon">🏠</span> Tableau de bord
+    </button>
+
+    <div class="nav-group-label" style="margin-top:8px">Semaine du 15 mars</div>
+    <button class="nav-btn" onclick="showPage('lecon1', this)">
+      <span class="icon">📚</span> Leçon 1 · PC & Imparfait
+      <span class="badge">Dom</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('lecon2', this)">
+      <span class="icon">⏩</span> Leçon 2 · Futur & Cond.
+      <span class="badge soon">Lun</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('lecon3', this)">
+      <span class="icon">🎧</span> Leçon 3 · Compré. orale
+      <span class="badge soon">Mar</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('lecon4', this)">
+      <span class="icon">✍️</span> Leçon 4 · Expression écrite
+      <span class="badge soon">Mer</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('lecon5', this)">
+      <span class="icon">📖</span> Leçon 5 · Compré. écrite
+      <span class="badge soon">Jeu</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('lecon6', this)">
+      <span class="icon">🗣️</span> Leçon 6 · Oral DELF
+      <span class="badge soon">Ven</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('lecon7', this)">
+      <span class="icon">🔁</span> Leçon 7 · Révision
+      <span class="badge soon">Sam</span>
+    </button>
+  </nav>
+  <div id="sidebar-footer">
+    Objectif · DELF B1 · Carte résident 10 ans
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<main id="main">
+
+  <!-- ══════════════════════════════════════
+       DASHBOARD
+  ══════════════════════════════════════ -->
+  <div id="dashboard" class="page active">
+    <div class="page-header">
+      <div class="breadcrumb">Mon Carnet de Français</div>
+      <h2>Semaine du 15 mars 2026</h2>
+      <p class="subtitle">7 leçons · 7 heures · Objectif DELF B1</p>
+      <div class="meta">
+        <span class="meta-chip">🎯 Niveau A2+ → B1</span>
+        <span class="meta-chip gold">📅 1h/jour · matin</span>
+        <span class="meta-chip green">✅ 7 sessions planifiées</span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="section-title">Programme de la semaine</div>
+      <div class="dashboard-grid">
+
+        <div class="dash-card today-card" onclick="showPage('lecon1', null)">
+          <div class="day-label">Dimanche 15 · 13h00</div>
+          <h3>Passé composé vs Imparfait</h3>
+          <p>Les deux temps du passé, leur usage et les pièges pour hispanophones.</p>
+          <div class="card-footer">
+            <span class="lesson-status today">⭐ Aujourd'hui</span>
+            <span class="duration">60 min</span>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('lecon2', null)">
+          <div class="day-label">Lundi 16 · 9h00</div>
+          <h3>Futur simple & Conditionnel</h3>
+          <p>Parler du futur, exprimer des hypothèses. Les bases pour le DELF.</p>
+          <div class="card-footer">
+            <span class="lesson-status upcoming">⏰ Demain</span>
+            <span class="duration">60 min</span>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('lecon3', null)">
+          <div class="day-label">Mardi 17 · 9h00</div>
+          <h3>Compréhension orale</h3>
+          <p>Stratégies d'écoute active, types d'audio DELF B1, RFI Journal.</p>
+          <div class="card-footer">
+            <span class="lesson-status upcoming">⏰ Mardi</span>
+            <span class="duration">60 min</span>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('lecon4', null)">
+          <div class="day-label">Mercredi 18 · 9h00</div>
+          <h3>Expression écrite</h3>
+          <p>Lettre formelle de réclamation. Structure, connecteurs, grille DELF.</p>
+          <div class="card-footer">
+            <span class="lesson-status upcoming">⏰ Mercredi</span>
+            <span class="duration">60 min</span>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('lecon5', null)">
+          <div class="day-label">Jeudi 19 · 9h00</div>
+          <h3>Compréhension écrite</h3>
+          <p>Lire des articles de presse. Repérer l'information implicite et explicite.</p>
+          <div class="card-footer">
+            <span class="lesson-status upcoming">⏰ Jeudi</span>
+            <span class="duration">60 min</span>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('lecon6', null)">
+          <div class="day-label">Vendredi 20 · 9h00</div>
+          <h3>Expression orale — DELF</h3>
+          <p>Les 3 parties de l'oral. Phrases d'accroche, connecteurs, simulation.</p>
+          <div class="card-footer">
+            <span class="lesson-status upcoming">⏰ Vendredi</span>
+            <span class="duration">60 min</span>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('lecon7', null)">
+          <div class="day-label">Samedi 21 · 9h00</div>
+          <h3>Révision de la semaine</h3>
+          <p>Bilan, flashcards vocabulaire, production libre. Avant Le Mans 🚗</p>
+          <div class="card-footer">
+            <span class="lesson-status upcoming">⏰ Samedi</span>
+            <span class="duration">60 min</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-title" style="margin-top:40px">Ressources quotidiennes</div>
+      <div class="cards-grid">
+        <div class="card gold">
+          <h3>🎙️ Frantastique</h3>
+          <p style="font-size:13.5px;line-height:1.6;color:var(--gray-700)">15 min chaque matin. Non négociable — c'est ta base quotidienne.</p>
+        </div>
+        <div class="card">
+          <h3>📻 RFI Journal</h3>
+          <p style="font-size:13.5px;line-height:1.6;color:var(--gray-700)"><strong>rfi.fr</strong> → Journal en français facile. 10 min d'écoute authentique.</p>
+        </div>
+        <div class="card green">
+          <h3>💛 Paul</h3>
+          <p style="font-size:13.5px;line-height:1.6;color:var(--gray-700)">La meilleure ressource que tu aies. Pratique avec lui chaque soir !</p>
+        </div>
+      </div>
+
+      <!-- ── TABLA DE VERBOS ESENCIALES ── -->
+      <div class="section-title" style="margin-top:44px">Verbos esenciales — tabla de conjugación por grupo</div>
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Selecciona un grupo. Columnas: Infinitif · Présent (je / nous / ils) · Passé composé · Imparfait · Futur · Conditionnel.</p>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <button class="vtab-btn vtab-active" onclick="showVerbGroup('vg1',this)">Groupe 1 — Verbes en <strong>-ER</strong></button>
+        <button class="vtab-btn" onclick="showVerbGroup('vg2',this)">Groupe 2 — Verbes en <strong>-IR</strong></button>
+        <button class="vtab-btn" onclick="showVerbGroup('vg3',this)">Groupe 3 — Irréguliers B1</button>
+      </div>
+
+      <style>
+        .vtab-btn {
+          padding: 8px 16px;
+          border-radius: 20px;
+          border: 2px solid var(--gray-200);
+          background: var(--white);
+          color: var(--gray-700);
+          font-size: 13px;
+          font-family: 'Inter', sans-serif;
+          cursor: pointer;
+          transition: all .15s;
+        }
+        .vtab-btn:hover { border-color: var(--blue); color: var(--blue); }
+        .vtab-btn.vtab-active { background: var(--blue-dark); border-color: var(--blue-dark); color: var(--white); }
+        .verb-group { display: none; }
+        .verb-group.vg-active { display: block; }
+        .verb-table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+        .verb-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--white); border-radius: var(--radius); overflow: hidden; }
+        .verb-table thead tr { background: var(--blue-dark); color: var(--white); }
+        .verb-table thead th { padding: 10px 13px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; text-align: left; white-space: nowrap; }
+        .verb-table thead th:first-child { border-radius: var(--radius) 0 0 0; }
+        .verb-table thead th:last-child  { border-radius: 0 var(--radius) 0 0; }
+        .verb-table tbody tr:nth-child(even) { background: var(--gray-100); }
+        .verb-table tbody tr:hover { background: var(--blue-light); }
+        .verb-table td { padding: 9px 13px; border-bottom: 1px solid var(--gray-100); vertical-align: top; white-space: nowrap; }
+        .verb-table td:first-child { font-weight: 700; color: var(--blue-dark); }
+        .verb-table .aux-e { color: var(--blue); font-weight: 600; }
+        .verb-table .aux-a { color: #92400E; font-weight: 600; }
+        .verb-table .note  { font-size: 11px; color: var(--gray-500); }
+        .verb-table .hl    { color: var(--blue); font-weight: 600; }
+      </style>
+
+      <!-- GROUPE 1 — ER -->
+      <div id="vg1" class="verb-group vg-active">
+        <div class="verb-table-wrap">
+          <table class="verb-table">
+            <thead>
+              <tr>
+                <th>Infinitif</th>
+                <th>Présent · je</th>
+                <th>Présent · nous</th>
+                <th>Présent · ils/elles</th>
+                <th>Passé composé · je</th>
+                <th>Imparfait · je</th>
+                <th>Futur · je</th>
+                <th>Conditionnel · je</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>parler</td><td>parle</td><td>parlons</td><td>parlent</td><td class="aux-a">ai parlé</td><td>parlais</td><td class="hl">parlerai</td><td>parlerais</td></tr>
+              <tr><td>aimer</td><td>aime</td><td>aimons</td><td>aiment</td><td class="aux-a">ai aimé</td><td>aimais</td><td class="hl">aimerai</td><td>aimerais</td></tr>
+              <tr><td>habiter</td><td>habite</td><td>habitons</td><td>habitent</td><td class="aux-e">suis habitée</td><td>habitais</td><td class="hl">habiterai</td><td>habiterais</td></tr>
+              <tr><td>travailler</td><td>travaille</td><td>travaillons</td><td>travaillent</td><td class="aux-a">ai travaillé</td><td>travaillais</td><td class="hl">travaillerai</td><td>travaillerais</td></tr>
+              <tr><td>chercher</td><td>cherche</td><td>cherchons</td><td>cherchent</td><td class="aux-a">ai cherché</td><td>cherchais</td><td class="hl">chercherai</td><td>chercherais</td></tr>
+              <tr><td>trouver</td><td>trouve</td><td>trouvons</td><td>trouvent</td><td class="aux-a">ai trouvé</td><td>trouvais</td><td class="hl">trouverai</td><td>trouverais</td></tr>
+              <tr><td>manger</td><td>mange</td><td>mangeons</td><td>mangent</td><td class="aux-a">ai mangé</td><td>mangeais</td><td class="hl">mangerai</td><td>mangerais</td></tr>
+              <tr><td>donner</td><td>donne</td><td>donnons</td><td>donnent</td><td class="aux-a">ai donné</td><td>donnais</td><td class="hl">donnerai</td><td>donnerais</td></tr>
+              <tr><td>arriver <span class="note">(être)</span></td><td>arrive</td><td>arrivons</td><td>arrivent</td><td class="aux-e">suis arrivée</td><td>arrivais</td><td class="hl">arriverai</td><td>arriverais</td></tr>
+              <tr><td>rentrer <span class="note">(être)</span></td><td>rentre</td><td>rentrons</td><td>rentrent</td><td class="aux-e">suis rentrée</td><td>rentrais</td><td class="hl">rentrerai</td><td>rentrerais</td></tr>
+              <tr><td>appeler</td><td>appelle</td><td>appelons</td><td>appellent</td><td class="aux-a">ai appelé</td><td>appelais</td><td class="hl">appellerai</td><td>appellerais</td></tr>
+              <tr><td>se lever <span class="note">(réfl.)</span></td><td>me lève</td><td>nous levons</td><td>se lèvent</td><td class="aux-e">me suis levée</td><td>me levais</td><td class="hl">me lèverai</td><td>me lèverais</td></tr>
+              <tr><td>pleurer</td><td>pleure</td><td>pleurons</td><td>pleurent</td><td class="aux-a">ai pleuré</td><td>pleurais</td><td class="hl">pleurerai</td><td>pleurerais</td></tr>
+              <tr><td>rester <span class="note">(être)</span></td><td>reste</td><td>restons</td><td>restent</td><td class="aux-e">suis restée</td><td>restais</td><td class="hl">resterai</td><td>resterais</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">💡</span>
+          <div><strong>Regla de oro grupo -ER:</strong> todos los participios terminan en <strong>-é</strong>. En présent: je/tu/il/ils tienen la misma pronunciación → la -e final no se pronuncia. <em>appeler</em> y <em>se lever</em> doblan la consonante en futur/conditionnel.</div>
+        </div>
+      </div>
+
+      <!-- GROUPE 2 — IR -->
+      <div id="vg2" class="verb-group">
+        <div class="verb-table-wrap">
+          <table class="verb-table">
+            <thead>
+              <tr>
+                <th>Infinitif</th>
+                <th>Présent · je</th>
+                <th>Présent · nous</th>
+                <th>Présent · ils/elles</th>
+                <th>Passé composé · je</th>
+                <th>Imparfait · je</th>
+                <th>Futur · je</th>
+                <th>Conditionnel · je</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>finir</td><td>finis</td><td>finissons</td><td>finissent</td><td class="aux-a">ai fini</td><td>finissais</td><td class="hl">finirai</td><td>finirais</td></tr>
+              <tr><td>choisir</td><td>choisis</td><td>choisissons</td><td>choisissent</td><td class="aux-a">ai choisi</td><td>choisissais</td><td class="hl">choisirai</td><td>choisirais</td></tr>
+              <tr><td>réussir</td><td>réussis</td><td>réussissons</td><td>réussissent</td><td class="aux-a">ai réussi</td><td>réussissais</td><td class="hl">réussirai</td><td>réussirais</td></tr>
+              <tr><td>partir <span class="note">(être)</span></td><td>pars</td><td>partons</td><td>partent</td><td class="aux-e">suis partie</td><td>partais</td><td class="hl">partirai</td><td>partirais</td></tr>
+              <tr><td>sortir <span class="note">(être)</span></td><td>sors</td><td>sortons</td><td>sortent</td><td class="aux-e">suis sortie</td><td>sortais</td><td class="hl">sortirai</td><td>sortirais</td></tr>
+              <tr><td>dormir</td><td>dors</td><td>dormons</td><td>dorment</td><td class="aux-a">ai dormi</td><td>dormais</td><td class="hl">dormirai</td><td>dormirais</td></tr>
+              <tr><td>ouvrir</td><td>ouvre</td><td>ouvrons</td><td>ouvrent</td><td class="aux-a">ai ouvert</td><td>ouvrais</td><td class="hl">ouvrirai</td><td>ouvrirais</td></tr>
+              <tr><td>venir <span class="note">(être)</span></td><td>viens</td><td>venons</td><td>viennent</td><td class="aux-e">suis venue</td><td>venais</td><td class="hl">viendrai</td><td>viendrais</td></tr>
+              <tr><td>tenir</td><td>tiens</td><td>tenons</td><td>tiennent</td><td class="aux-a">ai tenu</td><td>tenais</td><td class="hl">tiendrai</td><td>tiendrais</td></tr>
+              <tr><td>devenir <span class="note">(être)</span></td><td>deviens</td><td>devenons</td><td>deviennent</td><td class="aux-e">suis devenue</td><td>devenais</td><td class="hl">deviendrai</td><td>deviendrais</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">💡</span>
+          <div><strong>Deux sous-groupes:</strong> Los -IR <em>réguliers</em> (finir, choisir) insertan <strong>-iss-</strong> en nous/vous/ils. Los -IR <em>irréguliers</em> (partir, dormir) la pierden: <em>je pars</em> ≠ <em>je finis</em>. <em>Venir</em> y <em>tenir</em> tienen raíz irregular en futur/conditionnel.</div>
+        </div>
+      </div>
+
+      <!-- GROUPE 3 — Irréguliers -->
+      <div id="vg3" class="verb-group">
+        <div class="verb-table-wrap">
+          <table class="verb-table">
+            <thead>
+              <tr>
+                <th>Infinitif</th>
+                <th>Présent · je</th>
+                <th>Présent · nous</th>
+                <th>Présent · ils/elles</th>
+                <th>Passé composé · je</th>
+                <th>Imparfait · je</th>
+                <th>Futur · je</th>
+                <th>Conditionnel · je</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>être</td><td>suis</td><td>sommes</td><td>sont</td><td class="aux-a">ai été</td><td class="hl">étais</td><td>serai</td><td>serais</td></tr>
+              <tr><td>avoir</td><td>ai</td><td>avons</td><td>ont</td><td class="aux-a">ai eu</td><td>avais</td><td>aurai</td><td>aurais</td></tr>
+              <tr><td>aller <span class="note">(être)</span></td><td>vais</td><td>allons</td><td>vont</td><td class="aux-e">suis allée</td><td>allais</td><td class="hl">irai</td><td>irais</td></tr>
+              <tr><td>faire</td><td>fais</td><td>faisons</td><td>font</td><td class="aux-a">ai fait</td><td>faisais</td><td class="hl">ferai</td><td>ferais</td></tr>
+              <tr><td>dire</td><td>dis</td><td>disons</td><td>disent</td><td class="aux-a">ai dit</td><td>disais</td><td>dirai</td><td>dirais</td></tr>
+              <tr><td>prendre</td><td>prends</td><td>prenons</td><td>prennent</td><td class="aux-a">ai pris</td><td>prenais</td><td>prendrai</td><td>prendrais</td></tr>
+              <tr><td>voir</td><td>vois</td><td>voyons</td><td>voient</td><td class="aux-a">ai vu</td><td>voyais</td><td>verrai</td><td>verrais</td></tr>
+              <tr><td>pouvoir</td><td>peux</td><td>pouvons</td><td>peuvent</td><td class="aux-a">ai pu</td><td>pouvais</td><td class="hl">pourrai</td><td>pourrais</td></tr>
+              <tr><td>vouloir</td><td>veux</td><td>voulons</td><td>veulent</td><td class="aux-a">ai voulu</td><td>voulais</td><td class="hl">voudrai</td><td>voudrais</td></tr>
+              <tr><td>savoir</td><td>sais</td><td>savons</td><td>savent</td><td class="aux-a">ai su</td><td>savais</td><td class="hl">saurai</td><td>saurais</td></tr>
+              <tr><td>mettre</td><td>mets</td><td>mettons</td><td>mettent</td><td class="aux-a">ai mis</td><td>mettais</td><td>mettrai</td><td>mettrais</td></tr>
+              <tr><td>lire</td><td>lis</td><td>lisons</td><td>lisent</td><td class="aux-a">ai lu</td><td>lisais</td><td>lirai</td><td>lirais</td></tr>
+              <tr><td>écrire</td><td>écris</td><td>écrivons</td><td>écrivent</td><td class="aux-a">ai écrit</td><td>écrivais</td><td>écrirai</td><td>écrirais</td></tr>
+              <tr><td>comprendre</td><td>comprends</td><td>comprenons</td><td>comprennent</td><td class="aux-a">ai compris</td><td>comprenais</td><td>comprendrai</td><td>comprendrais</td></tr>
+              <tr><td>boire</td><td>bois</td><td>buvons</td><td>boivent</td><td class="aux-a">ai bu</td><td>buvais</td><td>boirai</td><td>boirais</td></tr>
+              <tr><td>devoir</td><td>dois</td><td>devons</td><td>doivent</td><td class="aux-a">ai dû</td><td>devais</td><td class="hl">devrai</td><td>devrais</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">⚡</span>
+          <div>Los verbos resaltados en <strong style="color:var(--blue)">azul</strong> (futur/cond.) tienen raíz irregular — hay que memorizarlas. Prioridad: <em>être → ser-, avoir → aur-, aller → ir-, faire → fer-, pouvoir → pourr-, vouloir → voudr-</em>.</div>
+        </div>
+      </div>
+
+      <script>
+        function showVerbGroup(id, btn) {
+          document.querySelectorAll('.verb-group').forEach(g => g.classList.remove('vg-active'));
+          document.getElementById(id).classList.add('vg-active');
+          document.querySelectorAll('.vtab-btn').forEach(b => b.classList.remove('vtab-active'));
+          btn.classList.add('vtab-active');
+        }
+      </script>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEÇON 1 — Passé composé vs Imparfait
+  ══════════════════════════════════════ -->
+  <div id="lecon1" class="page">
+    <div class="page-header">
+      <div class="breadcrumb">Semaine du 15 mars → Leçon 1</div>
+      <h2>Passé composé & Imparfait</h2>
+      <p class="subtitle">Les deux temps du passé — les maîtriser, c'est raconter ta vie en B1.</p>
+      <div class="meta">
+        <span class="meta-chip">📅 Dimanche 15 mars · 13h00</span>
+        <span class="meta-chip gold">⏱️ 60 min</span>
+        <span class="meta-chip green">📐 Grammaire B1</span>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- TARJETA 1 -->
+      <div class="section-title">Tarjeta 1 — ¿Cuándo usar cada tiempo?</div>
+      <div class="card-wide">
+        <h3>La regla fundamental</h3>
+        <table>
+          <thead><tr><th></th><th>Passé composé</th><th>Imparfait</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Tipo de acción</strong></td><td>Puntual, terminada, con límite claro</td><td>Continua, sin límite, de fondo</td></tr>
+            <tr><td><strong>¿Cuántas veces?</strong></td><td>Una vez (o número específico)</td><td>Repetida, habitual</td></tr>
+            <tr><td><strong>¿Para qué?</strong></td><td>Contar eventos de la historia</td><td>Describir el contexto, el décor</td></tr>
+            <tr><td><strong>Palabras clave</strong></td><td><em>soudain, un jour, hier, enfin, d'abord</em></td><td><em>toujours, souvent, chaque matin, avant, quand j'étais petite</em></td></tr>
+          </tbody>
+        </table>
+        <div class="tip">
+          <span class="emoji">🧠</span>
+          <div><strong>Analogía en español:</strong> PC = pretérito indefinido (<em>fui, comí, llegué</em>). Imparfait = pretérito imperfecto (<em>iba, comía, llegaba</em>). La lógica es idéntica — solo cambia la forma.</div>
+        </div>
+      </div>
+
+      <!-- TARJETA 2 -->
+      <div class="section-title">Tarjeta 2 — Formación del Passé composé</div>
+      <div class="rule-box">
+        <div class="label">Estructura</div>
+        SUJETO &nbsp;+&nbsp; AUXILIAR (avoir/être en présent) &nbsp;+&nbsp; PARTICIPIO PASADO
+      </div>
+      <div class="cards-grid" style="margin-top:14px">
+        <div class="card">
+          <h3>Con AVOIR (mayoría)</h3>
+          <div class="example-box">
+            j'<strong>ai mangé</strong> · tu <strong>as fini</strong><br>
+            elle <strong>a pris</strong> · nous <strong>avons vu</strong>
+          </div>
+        </div>
+        <div class="card gold">
+          <h3>Con ÊTRE (movimiento)</h3>
+          <div class="example-box gold">
+            je <strong>suis arrivée</strong> · il <strong>est parti</strong><br>
+            nous <strong>sommes rentrés</strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-wide" style="margin-top:14px">
+        <h3>⚠️ Con ÊTRE el participio concuerda con el sujeto</h3>
+        <table>
+          <thead><tr><th>Sujeto</th><th>Participio de <em>aller</em></th></tr></thead>
+          <tbody>
+            <tr><td>je (masc.)</td><td class="correct">je suis allé</td></tr>
+            <tr><td>je (fém.)</td><td class="correct">je suis allé<strong>e</strong></td></tr>
+            <tr><td>ils</td><td class="correct">ils sont allé<strong>s</strong></td></tr>
+            <tr><td>elles</td><td class="correct">elles sont allé<strong>es</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TARJETA 3 — Dr Mrs Vandertramp -->
+      <div class="section-title">Tarjeta 3 — Verbos con ÊTRE (Dr & Mrs Vandertramp)</div>
+      <div class="card-wide">
+        <h3>Los verbos de movimiento y estado — siempre con être</h3>
+        <table>
+          <thead><tr><th>Verbo</th><th>Participio</th><th>Verbo</th><th>Participio</th></tr></thead>
+          <tbody>
+            <tr><td><strong>D</strong>escendre</td><td>descendu</td><td><strong>V</strong>enir</td><td>venu</td></tr>
+            <tr><td><strong>R</strong>entrer</td><td>rentré</td><td><strong>A</strong>ller</td><td>allé</td></tr>
+            <tr><td><strong>M</strong>onter</td><td>monté</td><td><strong>N</strong>aître</td><td>né</td></tr>
+            <tr><td><strong>R</strong>ester</td><td>resté</td><td><strong>D</strong>evenir</td><td>devenu</td></tr>
+            <tr><td><strong>S</strong>ortir</td><td>sorti</td><td><strong>E</strong>ntrer</td><td>entré</td></tr>
+            <tr><td><strong>T</strong>omber</td><td>tombé</td><td><strong>R</strong>etourner</td><td>retourné</td></tr>
+            <tr><td><strong>R</strong>evenir</td><td>revenu</td><td><strong>A</strong>rriver</td><td>arrivé</td></tr>
+            <tr><td><strong>M</strong>ourir</td><td>mort</td><td><strong>P</strong>artir</td><td>parti</td></tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">💡</span>
+          <div>También todos los <strong>verbos reflexivos/pronominaux</strong>: <em>se lever → je me suis levée / se coucher → elle s'est couchée</em></div>
+        </div>
+      </div>
+
+      <!-- TARJETA 4 — Imparfait -->
+      <div class="section-title">Tarjeta 4 — Formación del Imparfait</div>
+      <div class="rule-box">
+        <div class="label">Fórmula</div>
+        Raíz = nous del présent (sin -ons) &nbsp;+&nbsp; terminaciones: <strong>-ais / -ais / -ait / -ions / -iez / -aient</strong>
+      </div>
+      <div class="cards-grid" style="margin-top:14px">
+        <div class="card">
+          <h3>parler (nous parlons → parl-)</h3>
+          <div class="conj-box">
+            <div class="conj-row"><span class="pronoun">je</span><span class="verb">parlais</span></div>
+            <div class="conj-row"><span class="pronoun">tu</span><span class="verb">parlais</span></div>
+            <div class="conj-row highlight"><span class="pronoun">il/elle</span><span class="verb">parlait</span></div>
+            <div class="conj-row"><span class="pronoun">nous</span><span class="verb">parlions</span></div>
+            <div class="conj-row"><span class="pronoun">vous</span><span class="verb">parliez</span></div>
+            <div class="conj-row highlight"><span class="pronoun">ils/elles</span><span class="verb">parlaient</span></div>
+          </div>
+        </div>
+        <div class="card gold">
+          <h3>être (único irregular)</h3>
+          <div class="conj-box">
+            <div class="conj-row"><span class="pronoun">je</span><span class="verb">étais</span></div>
+            <div class="conj-row"><span class="pronoun">tu</span><span class="verb">étais</span></div>
+            <div class="conj-row highlight"><span class="pronoun">il/elle</span><span class="verb" style="color:var(--gold)">était</span></div>
+            <div class="conj-row"><span class="pronoun">nous</span><span class="verb">étions</span></div>
+            <div class="conj-row"><span class="pronoun">vous</span><span class="verb">étiez</span></div>
+            <div class="conj-row highlight"><span class="pronoun">ils/elles</span><span class="verb" style="color:var(--gold)">étaient</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETA 5 — Participios irregulares (flip cards) -->
+      <div class="section-title">Tarjeta 5 — Participios irregulares (clic para voltear)</div>
+      <div class="flip-hint">👆 Haz clic en cada tarjeta para ver el participio</div>
+      <div class="flip-grid">
+        <!-- avoir, être, faire, dire, voir, vouloir, pouvoir, savoir, prendre, mettre, venir, boire, lire, écrire, comprendre, ouvrir -->
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">avoir</div><div class="hint">auxiliaire</div></div>
+            <div class="back"><div class="participe">eu</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">être</div><div class="hint">auxiliaire</div></div>
+            <div class="back"><div class="participe">été</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">faire</div><div class="hint">action</div></div>
+            <div class="back"><div class="participe">fait</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">dire</div><div class="hint">parole</div></div>
+            <div class="back"><div class="participe">dit</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">voir</div><div class="hint">perception</div></div>
+            <div class="back"><div class="participe">vu</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">prendre</div><div class="hint">action</div></div>
+            <div class="back"><div class="participe">pris</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">venir</div><div class="hint">mouvement</div></div>
+            <div class="back"><div class="participe">venu</div><div class="auxiliaire etre">être</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">partir</div><div class="hint">mouvement</div></div>
+            <div class="back"><div class="participe">parti</div><div class="auxiliaire etre">être</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">pouvoir</div><div class="hint">modalité</div></div>
+            <div class="back"><div class="participe">pu</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">vouloir</div><div class="hint">désir</div></div>
+            <div class="back"><div class="participe">voulu</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">savoir</div><div class="hint">connaissance</div></div>
+            <div class="back"><div class="participe">su</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">boire</div><div class="hint">quotidien</div></div>
+            <div class="back"><div class="participe">bu</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">lire</div><div class="hint">lecture</div></div>
+            <div class="back"><div class="participe">lu</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">écrire</div><div class="hint">admin</div></div>
+            <div class="back"><div class="participe">écrit</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">comprendre</div><div class="hint">compréhension</div></div>
+            <div class="back"><div class="participe">compris</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner">
+            <div class="front"><div class="infinitif">mettre</div><div class="hint">action</div></div>
+            <div class="back"><div class="participe">mis</div><div class="auxiliaire avoir">avoir</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETA 6 — Negación -->
+      <div class="section-title">Tarjeta 6 — Negación en Passé composé</div>
+      <div class="card-wide">
+        <h3>El ne...pas envuelve el AUXILIAR (no el participio)</h3>
+        <div class="neg-diagram">
+          <div class="neg-part ne">je NE</div>
+          <span class="neg-arrow">+</span>
+          <div class="neg-part aux">ai</div>
+          <span class="neg-arrow">+</span>
+          <div class="neg-part neg">PAS / RIEN / JAMAIS</div>
+          <span class="neg-arrow">+</span>
+          <div class="neg-part pp">compris</div>
+        </div>
+        <table style="margin-top:14px">
+          <thead><tr><th>Positivo</th><th>Negativo</th></tr></thead>
+          <tbody>
+            <tr><td><em>j'ai compris</em></td><td><em>je <strong>n'</strong>ai <strong>pas</strong> compris</em></td></tr>
+            <tr><td><em>elle est venue</em></td><td><em>elle <strong>n'</strong>est <strong>pas</strong> venue</em></td></tr>
+            <tr><td><em>il a mangé quelque chose</em></td><td><em>il <strong>n'</strong>a <strong>rien</strong> mangé</em> ← rien antes del participio</td></tr>
+            <tr><td><em>nous avons toujours dormi</em></td><td><em>nous <strong>n'</strong>avons <strong>jamais</strong> dormi</em></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TARJETA 7 — Elision -->
+      <div class="section-title">Tarjeta 7 — Elision: me / te / se / le / la</div>
+      <div class="card-wide">
+        <h3>Antes de vocal o h muda → apóstrofe obligatoria</h3>
+        <table>
+          <thead><tr><th>Antes de consonante</th><th>Antes de vocal / h muda</th></tr></thead>
+          <tbody>
+            <tr><td>Il <strong>me</strong> dit.</td><td>Il <strong>m'</strong>a dit.</td></tr>
+            <tr><td>Tu <strong>te</strong> lèves.</td><td>Tu <strong>t'</strong>es levée.</td></tr>
+            <tr><td>Elle <strong>se</strong> lave.</td><td>Elle <strong>s'</strong>est lavée.</td></tr>
+            <tr><td>Je <strong>le</strong> vois.</td><td>Je <strong>l'</strong>ai vu.</td></tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">🧠</span>
+          <div>Si suena raro decirlo sin apóstrofe, es que falta. <em>"Il me a dit"</em> no existe en francés — siempre <em>"Il <strong>m'a</strong> dit"</em>.</div>
+        </div>
+      </div>
+
+      <!-- EJERCICIOS Ronda 2 -->
+      <div class="section-title">Ejercicios — Ronda 2 (para resolver a mano)</div>
+
+      <div style="background:var(--blue-dark);color:var(--white);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;font-size:13.5px;">
+        <strong>Instrucciones:</strong> Resuelve a mano en tu cuaderno. Cuando termines, pide a tu coach que los corrija. Los ejercicios A y B son de gramática; el C es de traducción libre.
+      </div>
+
+      <div class="exercise-block">
+        <div class="exercise-num">Exercice A · Conjugue au bon temps (PC ou imparfait)</div>
+        <p>
+          <strong>1.</strong> Quand Paul et moi (se rencontrer) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>, j'(avoir) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 28 ans et je (vivre) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> encore à Medellín.
+        </p>
+        <p style="margin-top:12px">
+          <strong>2.</strong> Hier matin, le bébé (ne pas dormir) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> bien, alors je (appeler) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> la pédiatre.
+        </p>
+        <p style="margin-top:12px">
+          <strong>3.</strong> Avant d'arriver en France, je (ne jamais manger) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> de raclette. La première fois, je la (trouver) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> délicieuse.
+        </p>
+        <p style="margin-top:12px">
+          <strong>4.</strong> Chaque dimanche, nous (aller) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> au marché. Mais ce dimanche-là, il (pleuvoir) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> trop fort et nous (rester) <span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> à la maison.
+        </p>
+      </div>
+
+      <div class="exercise-block gold">
+        <div class="exercise-num">Exercice B · Corrige l'erreur (hay UNA sola en cada oración)</div>
+        <p><strong>5.</strong> Hier, je suis allée à la préfecture et j'ai attendée deux heures.</p>
+        <p style="margin-top:10px"><strong>6.</strong> Quand j'étaient petite, je voulais être architecte.</p>
+        <p style="margin-top:10px"><strong>7.</strong> Il me a dit qu'il arriverait en retard.</p>
+        <p style="margin-top:10px"><strong>8.</strong> Nous avons ne pas compris le formulaire de la CAF.</p>
+      </div>
+
+      <div class="exercise-block green">
+        <div class="exercise-num">Exercice C · Traduce al francés usando PC o imparfait</div>
+        <p><strong>9.</strong> Cuando era niña, siempre hablaba con mi abuela por teléfono los domingos.</p>
+        <p style="margin-top:10px"><strong>10.</strong> Esta mañana me levanté tarde y no desayuné nada.</p>
+        <div class="note">Usa tous les temps étudiés hoy. Presta atención a los auxiliares y acuerdos.</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEÇON 2 — Futur simple & Conditionnel
+  ══════════════════════════════════════ -->
+  <div id="lecon2" class="page">
+    <div class="page-header">
+      <div class="breadcrumb">Semaine du 15 mars → Leçon 2</div>
+      <h2>Futur simple & Conditionnel présent</h2>
+      <p class="subtitle">Hablar del futuro, expresar hipótesis y deseos — esenciales para el DELF B1.</p>
+      <div class="meta">
+        <span class="meta-chip">📅 Lundi 16 mars · 9h00</span>
+        <span class="meta-chip gold">⏱️ 60 min</span>
+        <span class="meta-chip green">📐 Grammaire B1</span>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="section-title">Tarjeta 1 — Futur simple: formación</div>
+      <div class="rule-box">
+        <div class="label">Fórmula</div>
+        INFINITIVO &nbsp;+&nbsp; terminaciones: <strong>-ai / -as / -a / -ons / -ez / -ont</strong><br>
+        <span style="color:rgba(255,255,255,.5);font-size:12px">Para verbos -RE → quitar la -e final: prendre → prendr- + terminación</span>
+      </div>
+      <div class="cards-grid" style="margin-top:14px">
+        <div class="card">
+          <h3>parler (regular)</h3>
+          <div class="conj-box">
+            <div class="conj-row"><span class="pronoun">je</span><span class="verb">parlerai</span></div>
+            <div class="conj-row"><span class="pronoun">tu</span><span class="verb">parleras</span></div>
+            <div class="conj-row"><span class="pronoun">il/elle</span><span class="verb">parlera</span></div>
+            <div class="conj-row"><span class="pronoun">nous</span><span class="verb">parlerons</span></div>
+            <div class="conj-row"><span class="pronoun">vous</span><span class="verb">parlerez</span></div>
+            <div class="conj-row"><span class="pronoun">ils/elles</span><span class="verb">parleront</span></div>
+          </div>
+        </div>
+        <div class="card gold">
+          <h3>Raíces irregulares</h3>
+          <table>
+            <thead><tr><th>Infinitivo</th><th>Raíz</th></tr></thead>
+            <tbody>
+              <tr><td>aller</td><td><strong>ir-</strong></td></tr>
+              <tr><td>avoir</td><td><strong>aur-</strong></td></tr>
+              <tr><td>être</td><td><strong>ser-</strong></td></tr>
+              <tr><td>faire</td><td><strong>fer-</strong></td></tr>
+              <tr><td>pouvoir</td><td><strong>pourr-</strong></td></tr>
+              <tr><td>vouloir</td><td><strong>voudr-</strong></td></tr>
+              <tr><td>venir</td><td><strong>viendr-</strong></td></tr>
+              <tr><td>savoir</td><td><strong>saur-</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-title">Tarjeta 2 — Conditionnel présent: formación</div>
+      <div class="rule-box">
+        <div class="label">Fórmula</div>
+        MISMA RAÍZ que el futur simple &nbsp;+&nbsp; terminaciones del <strong>imparfait</strong>: <strong>-ais / -ais / -ait / -ions / -iez / -aient</strong>
+      </div>
+      <div class="example-box" style="margin-top:14px">
+        <strong>aller :</strong> j'irais, tu irais, il irait, nous irions, vous iriez, ils iraient<br>
+        <strong>être :</strong> je serais, tu serais, elle serait, nous serions…<br>
+        <strong>avoir :</strong> j'aurais, tu aurais, il aurait…
+      </div>
+
+      <div class="section-title">Tarjeta 3 — ¿Cuándo usar cada uno?</div>
+      <div class="card-wide">
+        <h3>Futur simple vs Conditionnel</h3>
+        <table>
+          <thead><tr><th>Tiempo</th><th>Uso</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Futur simple</strong></td><td>Acción que va a pasar (certeza)</td><td><em>Demain, j'<strong>irai</strong> à la préfecture.</em></td></tr>
+            <tr><td><strong>Conditionnel</strong></td><td>Hipótesis (si + imparfait → conditionnel)</td><td><em>Si j'avais le DELF, j'<strong>aurais</strong> la carte de résident.</em></td></tr>
+            <tr><td><strong>Conditionnel</strong></td><td>Petición cortés / deseo</td><td><em>Je <strong>voudrais</strong> un café, s'il vous plaît.</em></td></tr>
+            <tr><td><strong>Conditionnel</strong></td><td>Consejo con devoir</td><td><em>Tu <strong>devrais</strong> réviser chaque matin.</em></td></tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">🧠</span>
+          <div><strong>La frase si:</strong> Si + imparfait → conditionnel. Jamás "si + conditionnel" ❌<br>
+          ✅ <em>Si j'<strong>avais</strong> plus de temps, je <strong>parlerais</strong> mieux français.</em></div>
+        </div>
+      </div>
+
+      <div class="section-title">Ejercicios — Leçon 2</div>
+      <div class="exercise-block">
+        <div class="exercise-num">Conjugue au futur simple ou au conditionnel</div>
+        <p><strong>1.</strong> L'année prochaine, nous (déménager) <span class="blank"></span> peut-être dans un appartement plus grand.</p>
+        <p style="margin-top:10px"><strong>2.</strong> Si je (parler) <span class="blank"></span> mieux français, je (trouver) <span class="blank"></span> un emploi plus facilement.</p>
+        <p style="margin-top:10px"><strong>3.</strong> Excusez-moi, je (vouloir) <span class="blank"></span> un rendez-vous pour renouveler mon titre de séjour.</p>
+        <p style="margin-top:10px"><strong>4.</strong> Quand le bébé (grandir) <span class="blank"></span>, il (aller) <span class="blank"></span> à l'école maternelle.</p>
+        <p style="margin-top:10px"><strong>5.</strong> Tu (devoir) <span class="blank"></span> appeler la CAF avant vendredi — c'est urgent.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEÇON 3 — Compréhension orale
+  ══════════════════════════════════════ -->
+  <div id="lecon3" class="page">
+    <div class="page-header">
+      <div class="breadcrumb">Semaine du 15 mars → Leçon 3</div>
+      <h2>Compréhension orale</h2>
+      <p class="subtitle">Entrena el oído para entender el francés real — no el de los libros.</p>
+      <div class="meta">
+        <span class="meta-chip">📅 Mardi 17 mars · 9h00</span>
+        <span class="meta-chip gold">⏱️ 60 min</span>
+        <span class="meta-chip green">🎧 Écoute active</span>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="section-title">Tarjeta 1 — El formato DELF B1 · Compréhension orale</div>
+      <div class="card-wide">
+        <h3>Estructura del examen (25 points)</h3>
+        <table>
+          <thead><tr><th>Ejercicio</th><th>Tipo de audio</th><th>Duración</th><th>Points</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Ex. 1</strong></td><td>3 documents courts (annonces, messages, infos)</td><td>~1 min cada uno</td><td>6</td></tr>
+            <tr><td><strong>Ex. 2</strong></td><td>Document long (interview, émission radio)</td><td>~3 min</td><td>10</td></tr>
+            <tr><td><strong>Ex. 3</strong></td><td>Document long (conversation, reportage)</td><td>~3 min</td><td>9</td></tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">🎯</span>
+          <div>Cada audio se escucha <strong>2 veces</strong>. La primera vez: panorama general. La segunda vez: detalles y respuestas.</div>
+        </div>
+      </div>
+
+      <div class="section-title">Tarjeta 2 — Estrategias de escucha activa</div>
+      <div class="cards-grid">
+        <div class="card">
+          <h3>🔍 Antes de escuchar</h3>
+          <p style="font-size:13.5px;line-height:1.7;color:var(--gray-700)">Lee las preguntas primero. Esto te dice <em>qué buscar</em> — no intentes entender todo.</p>
+        </div>
+        <div class="card gold">
+          <h3>👂 Primera escucha</h3>
+          <p style="font-size:13.5px;line-height:1.7;color:var(--gray-700)">Contexto general: ¿Quién habla? ¿Dónde? ¿De qué? No anotes todavía.</p>
+        </div>
+        <div class="card green">
+          <h3>✍️ Segunda escucha</h3>
+          <p style="font-size:13.5px;line-height:1.7;color:var(--gray-700)">Responde pregunta por pregunta. Anota palabras clave, no frases completas.</p>
+        </div>
+        <div class="card red">
+          <h3>⛔ Si no entiendes</h3>
+          <p style="font-size:13.5px;line-height:1.7;color:var(--gray-700)">Pasa a la siguiente. Mejor 8 buenas que 10 inseguras. Nunca dejes en blanco.</p>
+        </div>
+      </div>
+
+      <div class="section-title">Tarjeta 3 — Vocabulaire thématique clé</div>
+      <div class="card-wide">
+        <h3>Las palabras que siempre aparecen en DELF B1 CO</h3>
+        <table>
+          <thead><tr><th>Thème</th><th>Vocabulaire essentiel</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Administration</strong></td><td>démarche, formulaire, convocation, rendez-vous, documents justificatifs, délai, guichet</td></tr>
+            <tr><td><strong>Travail</strong></td><td>emploi, poste, contrat, candidature, entretien, salaire, congé, formation</td></tr>
+            <tr><td><strong>Santé</strong></td><td>consultation, ordonnance, mutuelle, urgences, symptôme, traitement, médecin traitant</td></tr>
+            <tr><td><strong>Logement</strong></td><td>loyer, charges, quittance, propriétaire, locataire, bail, état des lieux</td></tr>
+            <tr><td><strong>Vie quotidienne</strong></td><td>crèche, école, mairie, association, bénévolat, voisinage, quartier</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title">Tarjeta 4 — Ressources recommandées</div>
+      <div class="cards-grid">
+        <div class="card">
+          <h3>📻 RFI Journal en français facile</h3>
+          <p style="font-size:13px;line-height:1.6;color:var(--gray-700)"><strong>rfi.fr/fr/podcasts/journal-en-français-facile</strong><br>10 min / jour. Nivel A2-B1. Hablado más lento que la radio normal.</p>
+        </div>
+        <div class="card gold">
+          <h3>🎬 TV5Monde Apprendre</h3>
+          <p style="font-size:13px;line-height:1.6;color:var(--gray-700)"><strong>apprendre.tv5monde.com</strong><br>Vídeos con transcripción y ejercicios integrados. Ideal para DELF.</p>
+        </div>
+        <div class="card green">
+          <h3>🎙️ Français Authentique</h3>
+          <p style="font-size:13px;line-height:1.6;color:var(--gray-700)">Podcast B1-B2. Francés real, sin simplificar. Para cuando RFI te resulte fácil.</p>
+        </div>
+      </div>
+
+      <div class="section-title">Ejercicio — Leçon 3</div>
+      <div class="exercise-block">
+        <div class="exercise-num">Exercice d'écoute guidée</div>
+        <p>Escucha un episodio de <strong>RFI Journal en français facile</strong> (cualquier episodio reciente, ~10 min).</p>
+        <p style="margin-top:10px">Después, responde en tu cuaderno:</p>
+        <p style="margin-top:8px"><strong>1.</strong> ¿Cuáles son los 3 temas principales de la emisión?</p>
+        <p style="margin-top:6px"><strong>2.</strong> Escribe 5 palabras nuevas que escuchaste (aunque no las entiendas todas).</p>
+        <p style="margin-top:6px"><strong>3.</strong> ¿Qué porcentaje del audio entendiste? (estimación honesta del 0 al 100%)</p>
+        <div class="note">No te estreses si entiendes poco — el objetivo hoy es entrenar el oído, no entender todo.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEÇON 4 — Expression écrite
+  ══════════════════════════════════════ -->
+  <div id="lecon4" class="page">
+    <div class="page-header">
+      <div class="breadcrumb">Semaine du 15 mars → Leçon 4</div>
+      <h2>Expression écrite</h2>
+      <p class="subtitle">La lettre formelle — le format vedette du DELF B1 Production écrite.</p>
+      <div class="meta">
+        <span class="meta-chip">📅 Mercredi 18 mars · 9h00</span>
+        <span class="meta-chip gold">⏱️ 60 min</span>
+        <span class="meta-chip green">✍️ Production écrite</span>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="section-title">Tarjeta 1 — Grille d'évaluation DELF PE (/25)</div>
+      <div class="card-wide">
+        <table>
+          <thead><tr><th>Critère</th><th>Points</th><th>Ce que l'examinateur regarde</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Respect de la consigne</strong></td><td>/5</td><td>A-t-elle répondu à TOUS les points demandés ? Longueur respectée ?</td></tr>
+            <tr><td><strong>Correction sociolinguistique</strong></td><td>/5</td><td>Registre adapté (formel si lettre formelle), vouvoiement, formules correctes</td></tr>
+            <tr><td><strong>Cohérence et cohésion</strong></td><td>/5</td><td>Connecteurs logiques, structure claire, paragraphes bien articulés</td></tr>
+            <tr><td><strong>Capacité à présenter des faits / exprimer sa pensée</strong></td><td>/5</td><td>Arguments développés, exemples, opinion exprimée</td></tr>
+            <tr><td><strong>Compétence lexicale et grammaticale</strong></td><td>/5</td><td>Variété de vocab, grammaire correcte, orthographe</td></tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:14px">
+          <span class="emoji">🎯</span>
+          <div><strong>Para pasar:</strong> necesitas 5/25. <strong>Para el DELF B1 completo:</strong> mínimo 5/25 en cada compétence + 50/100 total.</div>
+        </div>
+      </div>
+
+      <div class="section-title">Tarjeta 2 — Structure de la lettre formelle</div>
+      <div class="card-wide gold">
+        <h3>El esqueleto que siempre funciona</h3>
+        <div class="example-box gold">
+          <strong>[Ville], le [date]</strong><br><br>
+          <strong>Objet :</strong> [Sujet en 1 ligne]<br><br>
+          <strong>Madame, Monsieur,</strong><br><br>
+          [Paragraphe 1 : contexte — qui je suis, pourquoi j'écris]<br><br>
+          [Paragraphe 2 : développement — le problème / la demande / les arguments]<br><br>
+          [Paragraphe 3 : conclusion — ce que j'attends, délai si nécessaire]<br><br>
+          <strong>Dans l'attente de votre réponse, je vous adresse mes cordiales salutations.</strong><br><br>
+          <strong>[Prénom Nom]</strong>
+        </div>
+      </div>
+
+      <div class="section-title">Tarjeta 3 — Conectores lógicos B1</div>
+      <div class="card-wide">
+        <table>
+          <thead><tr><th>Función</th><th>Conectores</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Organizar</strong></td><td>D'abord, ensuite, enfin, premièrement, de plus</td></tr>
+            <tr><td><strong>Argumentar</strong></td><td>En effet, par exemple, c'est pourquoi, par conséquent, ainsi</td></tr>
+            <tr><td><strong>Oponer</strong></td><td>Cependant, en revanche, même si, malgré, pourtant</td></tr>
+            <tr><td><strong>Concluir</strong></td><td>En conclusion, pour conclure, finalement, en définitive</td></tr>
+            <tr><td><strong>Agregar</strong></td><td>De plus, en outre, par ailleurs, également, aussi</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title">Tarjeta 4 — Formules indispensables</div>
+      <div class="cards-grid">
+        <div class="card">
+          <h3>🖊️ Ouverture</h3>
+          <p style="font-size:13px;line-height:1.8;color:var(--gray-700)">
+            <em>Je me permets de vous écrire au sujet de…</em><br>
+            <em>Suite à notre entretien du…</em><br>
+            <em>J'ai l'honneur de vous informer que…</em><br>
+            <em>Par la présente, je vous informe…</em>
+          </p>
+        </div>
+        <div class="card gold">
+          <h3>🤝 Fermeture</h3>
+          <p style="font-size:13px;line-height:1.8;color:var(--gray-700)">
+            <em>Dans l'attente de votre réponse…</em><br>
+            <em>Je reste à votre disposition pour…</em><br>
+            <em>Veuillez agréer mes salutations…</em><br>
+            <em>Je vous adresse mes cordiales salutations.</em>
+          </p>
+        </div>
+      </div>
+
+      <div class="section-title">Ejercicio — Leçon 4</div>
+      <div class="exercise-block">
+        <div class="exercise-num">Exercice de production écrite (150–180 mots)</div>
+        <p><strong>Consigne :</strong> Vous habitez à Courbevoie. Votre voisin du dessus fait beaucoup de bruit chaque soir après 22h. Vous décidez d'écrire une lettre au syndic de l'immeuble pour signaler le problème et demander une solution.</p>
+        <p style="margin-top:10px">Écrivez une lettre formelle. Vous devez :</p>
+        <p style="margin-top:6px">• Expliquer la situation et le problème</p>
+        <p style="margin-top:4px">• Décrire l'impact sur votre vie quotidienne</p>
+        <p style="margin-top:4px">• Proposer ou demander une solution</p>
+        <div class="note">Usa la estructura de la Tarjeta 2. Mínimo 3 conectores lógicos. Vouvoiement obligatoire.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEÇON 5 — Compréhension écrite
+  ══════════════════════════════════════ -->
+  <div id="lecon5" class="page">
+    <div class="page-header">
+      <div class="breadcrumb">Semaine du 15 mars → Leçon 5</div>
+      <h2>Compréhension écrite</h2>
+      <p class="subtitle">Leer en francés con estrategia — no todo al mismo tiempo.</p>
+      <div class="meta">
+        <span class="meta-chip">📅 Jeudi 19 mars · 9h00</span>
+        <span class="meta-chip gold">⏱️ 60 min</span>
+        <span class="meta-chip green">📖 Lecture B1</span>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="section-title">Tarjeta 1 — El formato DELF B1 · Compréhension écrite</div>
+      <div class="card-wide">
+        <table>
+          <thead><tr><th>Ejercicio</th><th>Tipo de documento</th><th>Points</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Ex. 1</strong></td><td>Documento práctico (folleto, programa, annonce mairie)</td><td>/13</td></tr>
+            <tr><td><strong>Ex. 2</strong></td><td>Artículo de prensa u opinión (250-350 mots)</td><td>/12</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title">Tarjeta 2 — Estrategias de lectura por tipo</div>
+      <div class="cards-grid">
+        <div class="card">
+          <h3>📋 Documento práctico</h3>
+          <p style="font-size:13.5px;line-height:1.7;color:var(--gray-700)">Lee las preguntas primero. Busca datos concretos: fechas, precios, horarios, condiciones. No necesitas entender cada palabra.</p>
+        </div>
+        <div class="card gold">
+          <h3>📰 Artículo de prensa</h3>
+          <p style="font-size:13.5px;line-height:1.7;color:var(--gray-700)">Lee el título y primer párrafo → idea principal. Lee las preguntas → vuelve al texto a buscar las respuestas. No leas todo de corrido.</p>
+        </div>
+      </div>
+
+      <div class="section-title">Tarjeta 3 — Vocabulario de prensa nivel B1</div>
+      <div class="card-wide">
+        <table>
+          <thead><tr><th>Mot</th><th>Significado</th><th>Mot</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td><em>selon</em></td><td>según</td><td><em>pourtant</em></td><td>sin embargo</td></tr>
+            <tr><td><em>désormais</em></td><td>de ahora en adelante</td><td><em>notamment</em></td><td>en particular</td></tr>
+            <tr><td><em>davantage</em></td><td>más (aún)</td><td><em>voire</em></td><td>incluso</td></tr>
+            <tr><td><em>s'avérer</em></td><td>resultar ser</td><td><em>quant à</em></td><td>en cuanto a</td></tr>
+            <tr><td><em>mettre en place</em></td><td>implementar</td><td><em>en hausse/baisse</em></td><td>en aumento/baja</td></tr>
+            <tr><td><em>bénéficier de</em></td><td>beneficiarse de</td><td><em>à l'origine</em></td><td>originalmente</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title">Ejercicio — Leçon 5</div>
+      <div class="exercise-block">
+        <div class="exercise-num">Exercice de lecture guidée</div>
+        <p>Ve a <strong>apprendre.tv5monde.com</strong> y busca un artículo nivel B1. Lee y responde:</p>
+        <p style="margin-top:10px"><strong>1.</strong> ¿Cuál es el tema principal del artículo? (1 frase en español)</p>
+        <p style="margin-top:6px"><strong>2.</strong> ¿Cuál es la opinión o postura del autor?</p>
+        <p style="margin-top:6px"><strong>3.</strong> Escribe 3 argumentos que usa el texto.</p>
+        <p style="margin-top:6px"><strong>4.</strong> Identifica 2 conectores lógicos del texto y explica su función.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEÇON 6 — Expression orale
+  ══════════════════════════════════════ -->
+  <div id="lecon6" class="page">
+    <div class="page-header">
+      <div class="breadcrumb">Semaine du 15 mars → Leçon 6</div>
+      <h2>Expression orale — DELF B1</h2>
+      <p class="subtitle">Las 3 partes del oral. Tu voz, tu historia, tu opinión.</p>
+      <div class="meta">
+        <span class="meta-chip">📅 Vendredi 20 mars · 9h00</span>
+        <span class="meta-chip gold">⏱️ 60 min</span>
+        <span class="meta-chip green">🗣️ Production orale</span>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="section-title">Tarjeta 1 — Las 3 partes del DELF B1 oral</div>
+      <div class="card-wide">
+        <table>
+          <thead><tr><th>Parte</th><th>Formato</th><th>Duración</th><th>Points</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Partie 1</strong> — Entretien dirigé</td><td>Preguntas del examinador sobre tu vida, familia, trabajo, proyectos. Sin preparación.</td><td>2–3 min</td><td>/25</td></tr>
+            <tr><td><strong>Partie 2</strong> — Exercice en interaction</td><td>Jeu de rôle. Una situación cotidiana (préfecture, médecin, voisin). 10 min preparación.</td><td>3–4 min</td><td>/25</td></tr>
+            <tr><td><strong>Partie 3</strong> — Point de vue</td><td>Leer un documento corto → dar tu opinión estructurada. 10 min preparación.</td><td>5–7 min</td><td>/25</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title">Tarjeta 2 — Presentación personal fluida (Partie 1)</div>
+      <div class="card-wide gold">
+        <h3>Tu guión de 2 minutos — memoriza este esquema</h3>
+        <div class="example-box gold">
+          <strong>Identité :</strong> Je m'appelle Estefi, je suis colombienne et j'ai [âge] ans.<br><br>
+          <strong>Situation :</strong> Je vis à Courbevoie depuis fin 2024, avec mon conjoint Paul et notre bébé.<br><br>
+          <strong>Travail :</strong> Je suis designer graphique et je dirige mon propre studio, Makata Studio, en freelance.<br><br>
+          <strong>Français :</strong> J'apprends le français depuis [durée]. C'est un défi, mais je progresse chaque jour !<br><br>
+          <strong>Projet :</strong> Mon objectif est d'obtenir le DELF B1 pour ma carte de résident.
+        </div>
+      </div>
+
+      <div class="section-title">Tarjeta 3 — Connecteurs oraux indispensables</div>
+      <div class="cards-grid">
+        <div class="card">
+          <h3>📌 Para estructurar</h3>
+          <p style="font-size:13px;line-height:1.9;color:var(--gray-700)">
+            <em>D'abord… ensuite… enfin…</em><br>
+            <em>Premièrement… deuxièmement…</em><br>
+            <em>En ce qui concerne…</em><br>
+            <em>Pour commencer…</em>
+          </p>
+        </div>
+        <div class="card gold">
+          <h3>💬 Para ganar tiempo</h3>
+          <p style="font-size:13px;line-height:1.9;color:var(--gray-700)">
+            <em>C'est une bonne question…</em><br>
+            <em>Eh bien… voyons…</em><br>
+            <em>Comment dire…</em><br>
+            <em>Je pense que… il me semble que…</em>
+          </p>
+        </div>
+        <div class="card green">
+          <h3>🙏 Si no entiendes</h3>
+          <p style="font-size:13px;line-height:1.9;color:var(--gray-700)">
+            <em>Excusez-moi, pourriez-vous répéter ?</em><br>
+            <em>Je n'ai pas bien compris la question.</em><br>
+            <em>Qu'est-ce que vous entendez par… ?</em>
+          </p>
+        </div>
+      </div>
+
+      <div class="section-title">Ejercicio — Leçon 6</div>
+      <div class="exercise-block">
+        <div class="exercise-num">Simulation Partie 1 — Entretien dirigé</div>
+        <p>Grábate en audio o video respondiendo estas preguntas en voz alta (sin leer). 2–3 min total.</p>
+        <p style="margin-top:10px"><strong>1.</strong> Pouvez-vous vous présenter ?</p>
+        <p style="margin-top:6px"><strong>2.</strong> Pourquoi avez-vous choisi de vivre en France ?</p>
+        <p style="margin-top:6px"><strong>3.</strong> Qu'est-ce que vous faites dans la vie ?</p>
+        <p style="margin-top:6px"><strong>4.</strong> Quels sont vos projets pour les prochains mois ?</p>
+        <p style="margin-top:6px"><strong>5.</strong> Comment trouvez-vous la vie à Courbevoie ?</p>
+        <div class="note">Comparte la grabación con tu coach para feedback detallado. O practica con Paul esta tarde. 💛</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEÇON 7 — Révision
+  ══════════════════════════════════════ -->
+  <div id="lecon7" class="page">
+    <div class="page-header">
+      <div class="breadcrumb">Semaine du 15 mars → Leçon 7</div>
+      <h2>Révision de la semaine</h2>
+      <p class="subtitle">Consolida lo aprendido. Luego, ¡a disfrutar Le Mans! 🚗</p>
+      <div class="meta">
+        <span class="meta-chip">📅 Samedi 21 mars · 9h00</span>
+        <span class="meta-chip gold">⏱️ 60 min</span>
+        <span class="meta-chip green">🔁 Révision</span>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="section-title">Récapitulatif des temps de la semaine</div>
+      <div class="card-wide">
+        <table>
+          <thead><tr><th>Temps</th><th>Formación</th><th>Uso principal</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Passé composé</strong></td>
+              <td>avoir/être + pp</td>
+              <td>Acción terminada, puntual</td>
+              <td><em>Je suis arrivée en 2024.</em></td>
+            </tr>
+            <tr>
+              <td><strong>Imparfait</strong></td>
+              <td>nous-ons + ais/ait…</td>
+              <td>Descripción, hábito pasado</td>
+              <td><em>Je parlais espagnol.</em></td>
+            </tr>
+            <tr>
+              <td><strong>Futur simple</strong></td>
+              <td>infinitivo + ai/as/a…</td>
+              <td>Acción futura (certeza)</td>
+              <td><em>J'irai à la préfecture.</em></td>
+            </tr>
+            <tr>
+              <td><strong>Conditionnel</strong></td>
+              <td>raíz futur + ais/ait…</td>
+              <td>Hipótesis, cortesía</td>
+              <td><em>Je voudrais le DELF B1.</em></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-title">Vocabulaire de la semaine — 20 mots à retenir</div>
+      <div class="flip-grid">
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">la démarche</div><div class="hint">admin</div></div><div class="back"><div class="participe" style="font-size:15px">el trámite</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">le formulaire</div><div class="hint">admin</div></div><div class="back"><div class="participe" style="font-size:15px">el formulario</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">la convocation</div><div class="hint">admin</div></div><div class="back"><div class="participe" style="font-size:15px">la citación / convocatoria</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">le délai</div><div class="hint">tiempo</div></div><div class="back"><div class="participe" style="font-size:15px">el plazo</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">le guichet</div><div class="hint">admin</div></div><div class="back"><div class="participe" style="font-size:15px">la ventanilla</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">la quittance</div><div class="hint">logement</div></div><div class="back"><div class="participe" style="font-size:15px">el recibo de alquiler</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">le syndic</div><div class="hint">logement</div></div><div class="back"><div class="participe" style="font-size:15px">el administrador de finca</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">l'ordonnance</div><div class="hint">santé</div></div><div class="back"><div class="participe" style="font-size:15px">la receta médica</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">la mutuelle</div><div class="hint">santé</div></div><div class="back"><div class="participe" style="font-size:15px">el seguro médico complementario</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">se permette de</div><div class="hint">formel</div></div><div class="back"><div class="participe" style="font-size:15px">permitirse / tomarse la libertad de</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">en revanche</div><div class="hint">connecteur</div></div><div class="back"><div class="participe" style="font-size:15px">en cambio / por otro lado</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">cependant</div><div class="hint">connecteur</div></div><div class="back"><div class="participe" style="font-size:15px">sin embargo</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">notamment</div><div class="hint">presse</div></div><div class="back"><div class="participe" style="font-size:15px">en particular / especialmente</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">désormais</div><div class="hint">presse</div></div><div class="back"><div class="participe" style="font-size:15px">de ahora en adelante / en adelante</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">davantage</div><div class="hint">presse</div></div><div class="back"><div class="participe" style="font-size:15px">más (aún) / todavía más</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">bénéficier de</div><div class="hint">admin</div></div><div class="back"><div class="participe" style="font-size:15px">beneficiarse de / disfrutar de</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">la crèche</div><div class="hint">famille</div></div><div class="back"><div class="participe" style="font-size:15px">la guardería</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">le bénévolat</div><div class="hint">société</div></div><div class="back"><div class="participe" style="font-size:15px">el voluntariado</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">s'avérer</div><div class="hint">presse</div></div><div class="back"><div class="participe" style="font-size:15px">resultar (ser) / revelarse</div></div></div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="inner"><div class="front"><div class="infinitif">mettre en place</div><div class="hint">action</div></div><div class="back"><div class="participe" style="font-size:15px">implementar / poner en marcha</div></div></div>
+        </div>
+      </div>
+
+      <div class="section-title">Ejercicio final de la semana</div>
+      <div class="exercise-block green">
+        <div class="exercise-num">Production libre — 5 phrases, 5 temps</div>
+        <p>Escribe <strong>5 frases sobre tu semana</strong>, usando un tiempo diferente en cada una:</p>
+        <p style="margin-top:10px"><strong>1.</strong> Una frase en <strong>passé composé</strong> (algo que hiciste esta semana)</p>
+        <p style="margin-top:6px"><strong>2.</strong> Una frase en <strong>imparfait</strong> (cómo era algo antes de llegar a Francia)</p>
+        <p style="margin-top:6px"><strong>3.</strong> Una frase en <strong>futur simple</strong> (algo que harás la próxima semana)</p>
+        <p style="margin-top:6px"><strong>4.</strong> Una frase en <strong>conditionnel</strong> (un deseo o hipótesis)</p>
+        <p style="margin-top:6px"><strong>5.</strong> Una frase con <strong>negación</strong> en passé composé (ne...pas o ne...rien)</p>
+        <div class="note">¡No hay respuesta incorrecta aquí — el objetivo es producir con confianza! 🌟</div>
+      </div>
+
+      <div class="tip" style="margin-top:28px">
+        <span class="emoji">🎉</span>
+        <div><strong>¡Felicidades por la semana!</strong> Has trabajado los 4 tiempos verbales B1 más importantes, practicado las 4 compétences del DELF, y construido una base sólida. La semana que viene: subjonctif, pronoms relatifs, et discours indirect. ¡Tú puedes! 🇫🇷</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function showPage(id, btn) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Show selected
+    document.getElementById(id).classList.add('active');
+    // Update nav
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else {
+      // Find the matching nav btn by page id
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)) {
+          b.classList.add('active');
+        }
+      });
+    }
+    // Close sidebar on mobile
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // Close sidebar clicking outside on mobile
+  document.getElementById('main').addEventListener('click', function() {
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>
