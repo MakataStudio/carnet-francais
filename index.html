@@ -483,6 +483,123 @@
       .ex-input.xlarge { min-width: 180px; }
     }
 
+    /* ── Mapa Relámpago ⚡ ── */
+    .mapa-relampago {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: 2px solid var(--gold);
+    }
+    .mapa-header {
+      background: linear-gradient(135deg, var(--gold) 0%, #D97706 100%);
+      color: var(--white);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .mapa-header .mapa-num {
+      font-size: 11px;
+      background: rgba(255,255,255,.25);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .mapa-zones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .mapa-zone {
+      padding: 16px;
+      border-bottom: 1px solid var(--gray-200);
+      border-right: 1px solid var(--gray-200);
+    }
+    .mapa-zone:nth-child(even) { border-right: none; }
+    .mapa-zone:nth-child(n+3) { border-bottom: none; }
+    .mapa-zone-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mapa-zone-label.z1 { color: var(--blue); }
+    .mapa-zone-label.z2 { color: #7C3AED; }
+    .mapa-zone-label.z3 { color: var(--green); }
+    .mapa-zone-label.z4 { color: var(--gold); }
+    .mapa-zone p { font-size: 13.5px; line-height: 1.6; color: var(--gray-700); }
+    .mapa-zone .mi-frase-input {
+      display: block;
+      width: 100%;
+      border: 1.5px dashed var(--green);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px;
+      color: var(--gray-900);
+      background: var(--green-light);
+      outline: none;
+      transition: border-color .2s;
+      min-height: 44px;
+      resize: none;
+    }
+    .mapa-zone .mi-frase-input:focus { border-color: var(--green); border-style: solid; }
+    .mapa-zone .mi-frase-input::placeholder { color: #6B7280; font-style: italic; }
+    .mapa-zone .check-list {
+      list-style: none;
+      padding: 0;
+    }
+    .mapa-zone .check-list li {
+      font-size: 13px;
+      padding: 4px 0;
+      color: var(--gray-700);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mapa-zone .check-list li::before {
+      content: '☐';
+      font-size: 16px;
+      color: var(--gray-500);
+    }
+    .mapa-zone .check-list li.checked::before {
+      content: '☑';
+      color: var(--green);
+    }
+    @media (max-width: 768px) {
+      .mapa-zones { grid-template-columns: 1fr; }
+      .mapa-zone { border-right: none; border-bottom: 1px solid var(--gray-200); }
+      .mapa-zone:last-child { border-bottom: none; }
+    }
+
+    /* ── Discovery prompt ── */
+    .discovery-prompt {
+      background: #EDE9FE;
+      border-left: 4px solid #7C3AED;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #4C1D95;
+    }
+    .discovery-prompt .question {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .discovery-prompt .hint-text {
+      font-size: 12.5px;
+      color: #6D28D9;
+      font-style: italic;
+    }
+
     /* ── Tip box ── */
     .tip {
       display: flex;
@@ -860,10 +977,10 @@
     <div class="page-header">
       <div class="breadcrumb">Mon Carnet de Français</div>
       <h2>Semaine du 15 mars 2026</h2>
-      <p class="subtitle">7 leçons · 7 heures · Objectif DELF B1</p>
+      <p class="subtitle">7 leçons · 7 heures · Objectif DELF B1 · Méthode Mapa Relámpago ⚡</p>
       <div class="meta">
         <span class="meta-chip">🎯 Niveau A2+ → B1</span>
-        <span class="meta-chip gold">📅 1h/jour · matin</span>
+        <span class="meta-chip gold">⚡ Mapa Relámpago</span>
         <span class="meta-chip green">✅ 7 sessions planifiées</span>
       </div>
     </div>
@@ -1149,8 +1266,55 @@
     </div>
     <div class="content">
 
-      <!-- TARJETA 1 -->
+      <!-- MAPA RELÁMPAGO ⚡ — PC vs Imparfait -->
+      <div class="section-title">⚡ Mapa Relámpago — Passé composé vs Imparfait</div>
+      <div class="mapa-relampago">
+        <div class="mapa-header">
+          <span class="mapa-num">Mapa #2</span>
+          ⚡ Passé composé vs Imparfait — ¿Cuándo uso cada uno?
+        </div>
+        <div class="mapa-zones">
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z1">⚡ Zona 1 — La regla relámpago</div>
+            <p><strong>PC = la película (acciones)</strong> · <strong>Imparfait = la foto de fondo (contexto)</strong><br>Si puedes decir "de repente" antes → PC. Si puedes decir "mientras tanto" → Imparfait.</p>
+          </div>
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z2">🗺️ Zona 2 — El mapa visual</div>
+            <div style="text-align:center;padding:8px 0;">
+              <div style="display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:center">
+                <span style="background:var(--blue-light);color:var(--blue-dark);padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px">IMPARFAIT<br><span style="font-weight:400;font-size:11px">Il faisait beau ☀️</span></span>
+                <span style="font-size:20px">→</span>
+                <span style="background:var(--gold-light);color:#92400E;padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px">⚡ PC<br><span style="font-weight:400;font-size:11px">Soudain, il a plu 🌧️</span></span>
+                <span style="font-size:20px">→</span>
+                <span style="background:var(--blue-light);color:var(--blue-dark);padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px">IMPARFAIT<br><span style="font-weight:400;font-size:11px">J'étais triste 😢</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z3">✍️ Zona 3 — Mi frase real</div>
+            <p style="font-size:12px;color:var(--gray-500);margin-bottom:6px">Escribe UNA frase de tu vida con los dos tiempos juntos:</p>
+            <textarea class="mi-frase-input" placeholder="Ej: Quand je suis arrivée à Courbevoie, il faisait très froid…"></textarea>
+          </div>
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z4">✅ Zona 4 — Check de progreso</div>
+            <ul class="check-list" onclick="event.target.closest('li')?.classList.toggle('checked')">
+              <li>Usé PC e imparfait al hablar con Paul</li>
+              <li>Escribí una frase con "soudain" + PC</li>
+              <li>Describí mi mañana con imparfait</li>
+              <li>Completé los ejercicios de la Ronda 2</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETA 1 — con discovery prompt -->
       <div class="section-title">Tarjeta 1 — ¿Cuándo usar cada tiempo?</div>
+      <div class="discovery-prompt">
+        <div class="question">🔍 Antes de ver la regla — observa estos pares:</div>
+        <p style="margin:8px 0"><em>"Hier, je <strong>suis allée</strong> au marché."</em> vs <em>"Quand j'<strong>étais</strong> petite, j'<strong>allais</strong> au marché chaque samedi."</em></p>
+        <p><em>"Paul <strong>a préparé</strong> le dîner."</em> vs <em>"Paul <strong>préparait</strong> toujours le dîner quand j'étais enceinte."</em></p>
+        <p class="hint-text" style="margin-top:8px">¿Qué notas? ¿Qué diferencia hay entre la acción de la izquierda y la de la derecha? Piensa 30 segundos antes de seguir ⬇️</p>
+      </div>
       <div class="card-wide">
         <h3>La regla fundamental</h3>
         <table>
@@ -1228,6 +1392,11 @@
 
       <!-- TARJETA 4 — Imparfait -->
       <div class="section-title">Tarjeta 4 — Formación del Imparfait</div>
+      <div class="discovery-prompt">
+        <div class="question">🔍 Descubre el patrón — mira estas conjugaciones:</div>
+        <p style="margin:8px 0"><em>nous <strong>parl</strong>ons → je parl<strong>ais</strong></em> · <em>nous <strong>finiss</strong>ons → je finiss<strong>ais</strong></em> · <em>nous <strong>prenn</strong>ons → je prenn<strong>ais</strong></em></p>
+        <p class="hint-text">¿Qué se repite siempre en la raíz? ¿De dónde viene? Pista: mira la forma "nous" del présent…</p>
+      </div>
       <div class="rule-box">
         <div class="label">Fórmula</div>
         Raíz = nous del présent (sin -ons) &nbsp;+&nbsp; terminaciones: <strong>-ais / -ais / -ait / -ions / -iez / -aient</strong>
@@ -1360,8 +1529,52 @@
         </div>
       </div>
 
-      <!-- TARJETA 6 — Negación -->
-      <div class="section-title">Tarjeta 6 — Negación en Passé composé</div>
+      <!-- MAPA RELÁMPAGO ⚡ — Negación -->
+      <div class="section-title">⚡ Mapa Relámpago — Negación en Passé composé</div>
+      <div class="mapa-relampago">
+        <div class="mapa-header">
+          <span class="mapa-num">Mapa #3</span>
+          ⚡ Negación en Passé composé — ¿Dónde va el ne...pas?
+        </div>
+        <div class="mapa-zones">
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z1">⚡ Zona 1 — La regla relámpago</div>
+            <p><strong>ne/n' va ANTES del auxiliar. pas/rien/jamais va DESPUÉS del auxiliar.</strong> El participio queda fuera del sándwich.</p>
+          </div>
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z2">🗺️ Zona 2 — El mapa visual</div>
+            <div style="text-align:center;padding:4px 0;">
+              <div style="display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:center;font-size:13px">
+                <span style="background:#FEE2E2;color:#991B1B;padding:6px 10px;border-radius:6px;font-weight:700">ne/n'</span>
+                <span style="background:#DBEAFE;color:#1E3A8A;padding:6px 10px;border-radius:6px;font-weight:700">AUXILIAR</span>
+                <span style="background:#FEF3C7;color:#92400E;padding:6px 10px;border-radius:6px;font-weight:700">pas/rien/jamais</span>
+                <span style="background:#DCFCE7;color:#14532D;padding:6px 10px;border-radius:6px;font-weight:700">participio</span>
+              </div>
+              <p style="font-size:12px;color:var(--gray-500);margin-top:6px">🥪 = sándwich alrededor del auxiliar</p>
+            </div>
+          </div>
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z3">✍️ Zona 3 — Mi frase real</div>
+            <textarea class="mi-frase-input" placeholder="Ej: Je n'ai pas compris le message de la crèche…"></textarea>
+          </div>
+          <div class="mapa-zone">
+            <div class="mapa-zone-label z4">✅ Zona 4 — Check de progreso</div>
+            <ul class="check-list" onclick="event.target.closest('li')?.classList.toggle('checked')">
+              <li>Usé ne...pas con avoir en una frase</li>
+              <li>Usé ne...pas con être en una frase</li>
+              <li>Usé ne...rien o ne...jamais</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETA 6 — Negación (detalle) -->
+      <div class="section-title">Tarjeta 6 — Negación en Passé composé (détail)</div>
+      <div class="discovery-prompt">
+        <div class="question">🔍 Observa estas frases negativas — ¿qué queda siempre "adentro" del ne...pas?</div>
+        <p style="margin:6px 0"><em>Je <strong>n'</strong>ai <strong>pas</strong> mangé</em> · <em>Elle <strong>n'</strong>est <strong>pas</strong> venue</em> · <em>Nous <strong>n'</strong>avons <strong>jamais</strong> dormi</em></p>
+        <p class="hint-text">¿El auxiliar o el participio? Míralo 👀</p>
+      </div>
       <div class="card-wide">
         <h3>El ne...pas envuelve el AUXILIAR (no el participio)</h3>
         <div class="neg-diagram">
@@ -2284,7 +2497,25 @@
 
       <div class="tip" style="margin-top:28px">
         <span class="emoji">🎉</span>
-        <div><strong>¡Felicidades por la semana!</strong> Has trabajado los 4 tiempos verbales B1 más importantes, practicado las 4 compétences del DELF, y construido una base sólida. La semana que viene: subjonctif, pronoms relatifs, et discours indirect. ¡Tú puedes! 🇫🇷</div>
+        <div><strong>¡Felicidades por la semana!</strong> Has trabajado los 4 tiempos verbales B1, practicado las 4 compétences del DELF, y creado tus primeros Mapas Relámpago ⚡. La semana que viene: subjonctif, pronoms relatifs, et discours indirect. ¡Tú puedes! 🇫🇷</div>
+      </div>
+
+      <!-- RESUMEN DE MAPAS RELÁMPAGO DE LA SEMANA -->
+      <div class="section-title" style="margin-top:36px">⚡ Tus Mapas Relámpago de esta semana</div>
+      <div class="card-wide gold">
+        <h3>Registro de mapas creados — Semaine 1</h3>
+        <table>
+          <thead><tr><th>#</th><th>Tema</th><th>Zona 3 completada</th><th>Zona 4 checks</th></tr></thead>
+          <tbody>
+            <tr><td><strong>#1</strong></td><td>Presente: terminaciones universales</td><td style="color:var(--green)">✅ Sí</td><td>Pendiente</td></tr>
+            <tr><td><strong>#2</strong></td><td>PC vs Imparfait</td><td>↑ Complétala en Leçon 1</td><td>Pendiente</td></tr>
+            <tr><td><strong>#3</strong></td><td>Negación en PC</td><td>↑ Complétala en Leçon 1</td><td>Pendiente</td></tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:10px">
+          <span class="emoji">💡</span>
+          <div>Cada mapa funciona mejor si escribes TU frase real (Zona 3) y tachas los checks (Zona 4) cuando los uses en la vida real. ¡No los dejes en blanco!</div>
+        </div>
       </div>
     </div>
   </div>
